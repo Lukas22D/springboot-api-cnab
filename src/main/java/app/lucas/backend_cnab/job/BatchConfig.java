@@ -29,6 +29,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.transaction.PlatformTransactionManager;
 
+import app.lucas.backend_cnab.web.model.TipoTransacao;
 import app.lucas.backend_cnab.web.model.Transacao;
 import app.lucas.backend_cnab.web.model.TransacaoCNAB;
 
@@ -114,11 +115,13 @@ public class BatchConfig {
     @Bean
     ItemProcessor<TransacaoCNAB, Transacao> processor() {
         return item -> {
+            var tipoTransacao = TipoTransacao.findByTipo(item.tipo());
+            var valorNormalizado = item.valor().divide(new BigDecimal(100)).multiply(tipoTransacao.getSinal());
             var transacao = new Transacao(
                 null,
                 item.tipo(),
                 null,
-                item.valor().divide(BigDecimal.valueOf(100)),
+                valorNormalizado,
                 item.cpf(),
                 item.cartao(),
                 null,

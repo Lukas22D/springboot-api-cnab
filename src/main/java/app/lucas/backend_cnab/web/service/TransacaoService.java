@@ -2,7 +2,6 @@ package app.lucas.backend_cnab.web.service;
 
 import org.springframework.stereotype.Service;
 
-import app.lucas.backend_cnab.web.model.TipoTransacao;
 import app.lucas.backend_cnab.web.model.TransacaoReport;
 import app.lucas.backend_cnab.web.repository.TransacaoRepository;
 
@@ -29,14 +28,19 @@ public class TransacaoService {
 
     public List<TransacaoReport> listTotaisTransacoesPorNomeDaLoja(){   
         var transacoes = transacaoRepository.findAllByOrderByNomeLojaAscIdDesc();
-        var reportMap = new LinkedHashMap<String, TransacaoReport>(); // LinkedHashMap para manter a ordem de inserção
+        var reportMap = new LinkedHashMap<String, TransacaoReport>();
 
 
         transacoes.forEach(transacao -> {
+
             String nomeLoja = transacao.nomeLoja();
-            var tipoTransacao = TipoTransacao.findByTipo(transacao.tipo());
-            BigDecimal valor = transacao.valor().multiply(
-                tipoTransacao.getSinal());
+            BigDecimal valor = transacao.valor();
+            /*
+             * O metodo compute recebe a chave e uma função que recebe a chave e o valor atual,
+             * se o valor atual for nulo, cria um novo objeto TransacaoReport com o nome da loja e o valor da transação
+             * se o valor atual não for nulo, adiciona o valor da transação ao total e a transação ao array de transações
+             * retorna o objeto TransacaoReport
+             */
             reportMap.compute(nomeLoja, (key, existingReport) ->{
                 var report = (existingReport != null) ? existingReport : new TransacaoReport(key, BigDecimal.ZERO, new ArrayList<>());
                 
