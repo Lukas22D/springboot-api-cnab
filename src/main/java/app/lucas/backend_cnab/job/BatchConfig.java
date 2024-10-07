@@ -29,8 +29,8 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.transaction.PlatformTransactionManager;
 
-import app.lucas.backend_cnab.model.Transacao;
-import app.lucas.backend_cnab.model.TransacaoCNAB;
+import app.lucas.backend_cnab.web.model.Transacao;
+import app.lucas.backend_cnab.web.model.TransacaoCNAB;
 
 
 @Configuration

@@ -1,4 +1,4 @@
-package app.lucas.backend_cnab.model;
+package app.lucas.backend_cnab.web.model;
 
 import java.math.BigDecimal;
 import java.sql.Date;
@@ -6,16 +6,19 @@ import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Column;
+
 public record Transacao(
-    Long id,
+    @Id Long id,
     Integer tipo,
     Date data,
     BigDecimal valor,
     Long cpf,
     String cartao,
     Time hora,
-    String donoLoja,
-    String nomeLoja
+    @Column("DONO_LOJA") String donoLoja,
+    @Column("NOME_LOJA") String nomeLoja
 ) {
     public Transacao withValor(BigDecimal valor) {
         return new Transacao(this.id(), this.tipo(), this.data(), valor, this.cpf(), this.cartao(), this.hora(), this.donoLoja(), this.nomeLoja());

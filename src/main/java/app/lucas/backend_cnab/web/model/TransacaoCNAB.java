@@ -1,4 +1,4 @@
-package app.lucas.backend_cnab.model;
+package app.lucas.backend_cnab.web.model;
 
 import java.math.BigDecimal;
 
