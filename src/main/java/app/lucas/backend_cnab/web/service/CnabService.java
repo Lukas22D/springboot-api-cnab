@@ -27,13 +27,17 @@ public class CnabService {
     }
     
     public void uploadCnabFile(MultipartFile file) throws Exception {
+        String originalFilename = file.getOriginalFilename();
+        if (originalFilename == null) {
+            throw new IllegalArgumentException("File name cannot be null");
+        }
 
-        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+        String fileName = StringUtils.cleanPath(originalFilename);
         var targetLocation = fileStoragerLocation.resolve(fileName);
         file.transferTo(targetLocation);
 
         var jobParameters = new JobParametersBuilder()
-            .addJobParameter("cnab", file.getOriginalFilename(), String.class, true)
+            .addJobParameter("cnab", originalFilename, String.class, true)
             .addJobParameter("cnabFile", "file:" + targetLocation.toString(), String.class, false)
             .toJobParameters();
 
